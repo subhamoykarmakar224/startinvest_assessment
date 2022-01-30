@@ -1,20 +1,27 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../context/authContext'
 import SellerProductDataService from "../services/productSellerServices";
-import { Container, Button, Card, CardGroup } from "react-bootstrap";
+import { Container, Button, Card, CardGroup, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
-
+import { ref, getDownloadURL } from 'firebase/storage'
+import { storage } from '../firebase'
+import ProductCard from './ProductCard';
 
 function SellerAllProducts() {
     const [products, setProducts] = useState([])
+    const { currentUser } = useAuth()
+    const uid = currentUser.uid
 
     const getAllProducts = async () => {
-        const data = SellerProductDataService.getAllProducts()
-        if(data === null) {
+        const data = await SellerProductDataService.getAllProducts(uid)
+        if (data === null) {
             setProducts([])
         }
-        setProducts(
-            data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-        )
+        const tmp_products = data.docs.map(d => ({
+            id: d.id, ...d.data()
+        }))
+        setProducts(tmp_products)
+        // data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
     }
 
     useEffect(() => {
@@ -28,21 +35,11 @@ function SellerAllProducts() {
                     <Button variant="dark" className="ms-4">+ Add Product</Button>
                 </Link>
             </h3>
-            <CardGroup>
-                {products.map((prod, index) => {
-                    <Card key={prod.id}>
-                        <Card.Img variant="top" src="{prod.image_id}" alt="product" />
-                        <Card.Body>
-                            <Card.Title>{prod.title}</Card.Title>
-                            <Card.Text>{prod.description}</Card.Text>
-                        </Card.Body>
-                        <Card.Footer>
-                            {/* <Card.Link href="#">Edit</Card.Link> */}
-                            {/* <Card.Link href="#">Delete</Card.Link> */}
-                        </Card.Footer>
-                    </Card>
-                })}
-            </CardGroup>
+            {/* <CardGroup className='g-4'> */}
+                {products && products.map((p) => (
+                    <ProductCard key={p.id} product={p} />
+                ))}
+            {/* </CardGroup> */}
         </Container>
     );
 }

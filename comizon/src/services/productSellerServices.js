@@ -6,7 +6,9 @@ import {
   addDoc,
   updateDoc,
   deleteDoc,
-  doc
+  doc,
+  query,
+  where
 } from 'firebase/firestore'
 import { TB_PRODUCTS } from '../utils/Constants'
 
@@ -27,8 +29,9 @@ class SellerProductDataService {
     return deleteDoc(productDoc)
   }
 
-  getAllProducts = () => {
-    return getDocs(sellerProductRef)
+  getAllProducts = (sellerId) => {
+    const q = query(sellerProductRef, where('seller_id', '==', sellerId))
+    return getDocs(q)
   }
 
   getProduct = (id) => {
