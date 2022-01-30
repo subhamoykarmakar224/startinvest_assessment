@@ -3,22 +3,64 @@ import { Form, Button, Card, Alert, Container } from "react-bootstrap";
 import { useAuth } from "../context/authContext";
 import { Link, useNavigate } from "react-router-dom";
 import Header from '../components/Header';
+import UserSellerDataService from "../services/userSellerServices";
+import UserBuyerDataService from "../services/userBuyerServices";
 
 function SignUpPage() {
     const emailRef = useRef();
     const passwordRef = useRef();
     const passwordConfirmRef = useRef();
     const roleRef = useRef();
-    const { login } = useAuth()
+    const { signup } = useAuth()
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate()
 
-    const handleSubmit = (e) => {
+    // Add to users collection after successful registration
+    const addNewUserDB = () => {
+        const role = roleRef.current.value
+        const email = emailRef.current.value
+
+        if (role === '1') {
+            // Add to user buyer database
+            const buyer = {
+                email, role
+            }
+            UserBuyerDataService.addUser(buyer)
+        } else if (role === '2') {
+            // Add to user seller database
+            const seller = {
+                email, role
+            }
+            UserSellerDataService.addUser(seller)
+        }
+    }
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(emailRef.current.value)
-        console.log(passwordRef.current.value)
-        console.log(roleRef.current.value)
+        if (passwordRef.current.value !== passwordConfirmRef.current.value) {
+            return setError('Passwords do not match.')
+        }
+
+        try {
+            setError('')
+            setLoading(true)
+            await signup(
+                emailRef.current.value,
+                passwordRef.current.value,
+                roleRef.current.value
+            )
+
+            // Add to users collection after successful registration
+            addNewUserDB()
+
+            navigate("/")
+        } catch (e) {
+            setError('Error: ' + e)
+        }
+        setLoading(false)
+
+
     }
     return (
         <>
@@ -53,7 +95,7 @@ function SignUpPage() {
                                         <option value="2">Seller</option>
                                     </Form.Select>
                                 </Form.Group>
-                                <Button disabled={loading} type='submit' className='w-100 mt-4'>Login</Button>
+                                <Button disabled={loading} type='submit' className='w-100 mt-4'>Sign Up</Button>
                             </Form>
                             <div className='w-100 text-center mt-3'>
                                 <Link to='/forgot-password'>

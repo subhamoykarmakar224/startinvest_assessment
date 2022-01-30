@@ -13,11 +13,21 @@ function LoginPage() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate()
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(emailRef.current.value)
-        console.log(passwordRef.current.value)
-        console.log(roleRef.current.value)
+        try {
+            setError('')
+            setLoading(true)
+            await login(
+                emailRef.current.value,
+                passwordRef.current.value,
+                roleRef.current.value
+            )
+            navigate('/')
+        } catch (e) {
+            setError('Error: ' + e)
+        }
+        setLoading(false)
     }
 
     return (

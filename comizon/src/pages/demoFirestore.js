@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 // import app from '../firebase'
-import UserDataService from "../services/userServices";
+import UserDataService from "../services/userSellerServices";
 
 
 function DemoFirestore() {

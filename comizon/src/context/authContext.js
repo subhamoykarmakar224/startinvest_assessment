@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { auth } from '../firebase'
-
 const AuthContext = React.createContext()
 
 // we get access to AuthContext using the useAuth hook
@@ -10,13 +9,16 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState();
+    const [userRole, setUserRole] = useState();
     const [loading, setLoading] = useState(true);
 
-    function signup(email, password) {
+    function signup(email, password, role) {
+        setUserRole(role)
         return auth.createUserWithEmailAndPassword(email, password)
     }
 
-    function login(email, password) {
+    function login(email, password, role) {
+        setUserRole(role)
         return auth.signInWithEmailAndPassword(email, password)
     }
 
@@ -46,6 +48,7 @@ export function AuthProvider({ children }) {
 
     const value = {
         currentUser,
+        userRole,
         signup,
         login,
         logout,

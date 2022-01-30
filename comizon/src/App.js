@@ -11,6 +11,7 @@ import PrivateRoute from './components/PrivateRoute.js';
 import BuyerHome from "./pages/buyer/Home";
 import SellerHome from './pages/seller/Home'
 import DemoFirestore from './pages/demoFirestore';
+import AddProduct from './pages/seller/AddProduct';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             {/* Private Route: Seller */}
             <Route path='/seller' element={<PrivateRoute />}>
               <Route path='/seller' element={<SellerHome />} />
+              <Route path='/seller/newproduct' element={<AddProduct />} />
             </Route>
           </Routes>
         </AuthProvider>
