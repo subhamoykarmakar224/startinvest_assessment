@@ -9,10 +9,12 @@ import ProductCard from './ProductCard';
 
 function SellerAllProducts() {
     const [products, setProducts] = useState([])
+    const [imageURLS, setImageURLS] = useState({})
     const { currentUser } = useAuth()
     const uid = currentUser.uid
 
     const getAllProducts = async () => {
+        
         const data = await SellerProductDataService.getAllProducts(uid)
         if (data === null) {
             setProducts([])
@@ -21,10 +23,15 @@ function SellerAllProducts() {
             id: d.id, ...d.data()
         }))
         setProducts(tmp_products)
-        // data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+    }
+
+
+    const getImage = () => {
+
     }
 
     useEffect(() => {
+        console.log('lsjkdfb')
         getAllProducts()
     }, [])
 
@@ -35,13 +42,42 @@ function SellerAllProducts() {
                     <Button variant="dark" className="ms-4">+ Add Product</Button>
                 </Link>
             </h3>
-            {/* <CardGroup className='g-4'> */}
-                {products && products.map((p) => (
-                    <ProductCard key={p.id} product={p} />
-                ))}
-            {/* </CardGroup> */}
+
+            {/* { JSON.stringify(imageURLS)} */}
+            {/* { JSON.stringify(products)} */}
+
+            <CardGroup>
+                {products && products.map((d) => {
+                    let img_uri_key = d.image_id
+                    const storageRef = ref(storage, img_uri_key)
+                    getDownloadURL(storageRef).then(
+                        (url) => {
+                            imageURLS[img_uri_key] = url
+                            setImageURLS(imageURLS)
+                        }
+                    )
+                    console.log(imageURLS)
+                    return (
+                        <div key={d.id}>
+                            <Card className='mt-4'>
+                                <Card.Img variant="top" src={imageURLS[d.image_id]} alt='image' height={200} />
+                                <Card.Body>
+                                    {/* <Image src={url} /> */}
+                                    <Card.Title>{d.title}</Card.Title>
+                                    <Card.Text>
+                                        <img src={imageURLS[d.image_id]} height={200} />
+                                        {d.description}</Card.Text>
+                                </Card.Body>
+                                <Card.Footer className="text-muted">${d.price}</Card.Footer>
+                            </Card>
+                        </div>
+                    )
+                })}
+            </CardGroup>
+
         </Container>
     );
 }
+
 
 export default SellerAllProducts;
