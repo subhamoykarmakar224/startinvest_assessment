@@ -14,7 +14,7 @@ function SellerAllProducts() {
     const uid = currentUser.uid
 
     const getAllProducts = async () => {
-        
+
         const data = await SellerProductDataService.getAllProducts(uid)
         if (data === null) {
             setProducts([])

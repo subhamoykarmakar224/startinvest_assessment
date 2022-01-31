@@ -15,21 +15,13 @@ import {
 } from 'firebase/firestore'
 import { TB_PRODUCTS } from '../utils/Constants'
 
-const buyerProductRef = collection(db, TB_PRODUCTS)
+const sellerProductRef = collection(db, TB_PRODUCTS)
 
-class SellerProductDataService {
-  getAllProducts = (searchString) => {
-    if (searchString === '') {
-      return getDocs()
-    } else {
-      const q = query(buyerProductRef,
-        orderBy('title'),
-        startAt(searchString),
-        endAt(searchString + '~')
-      )
-      return getDocs(q)
-    }
+class BuyerProductDataService {
+  getAllProducts = () => {
+    return getDocs(sellerProductRef)
   }
+
 
   getPurchaseHistory() {
 
@@ -42,4 +34,4 @@ class SellerProductDataService {
 }
 
 
-export default new SellerProductDataService();
+export default new BuyerProductDataService();
