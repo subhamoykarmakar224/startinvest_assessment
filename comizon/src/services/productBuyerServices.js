@@ -15,11 +15,11 @@ import {
 } from 'firebase/firestore'
 import { TB_PRODUCTS } from '../utils/Constants'
 
-const sellerProductRef = collection(db, TB_PRODUCTS)
+const buyerProductRef = collection(db, TB_PRODUCTS)
 
 class BuyerProductDataService {
   getAllProducts = () => {
-    return getDocs(sellerProductRef)
+    return getDocs(buyerProductRef)
   }
 
 

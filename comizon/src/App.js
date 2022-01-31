@@ -12,6 +12,7 @@ import BuyerHome from "./pages/buyer/Home";
 import SellerHome from './pages/seller/Home'
 import DemoFirestore from './pages/demoFirestore';
 import AddProduct from './pages/seller/AddProduct';
+import ProductDetails from './pages/buyer/ProductDetails';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             {/* Private Route: Buyer */}
             <Route path='/' element={<PrivateRoute />}>
               <Route path='/' element={<BuyerHome />} />
+              <Route path='/details/:productid' element={<ProductDetails />} />
             </Route>
 
             {/* Private Route: Seller */}

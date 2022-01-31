@@ -5,7 +5,7 @@ import { Container, Button, Card, CardGroup, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { ref, getDownloadURL } from 'firebase/storage'
 import { storage } from '../firebase'
-import ProductCard from './ProductCard';
+
 
 function SellerAllProducts() {
     const [products, setProducts] = useState([])

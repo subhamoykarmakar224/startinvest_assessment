@@ -70,6 +70,10 @@ function BuyerAllProducts() {
                         </Card.Body>
                         <Card.Footer className="text-muted">
                             <Button variant="primary">Add to Cart</Button>
+                            <Link to={`/details/${p.id}`}
+                                className='btn'>
+                                More...
+                            </Link>
                         </Card.Footer>
                     </Card>
                 ))}

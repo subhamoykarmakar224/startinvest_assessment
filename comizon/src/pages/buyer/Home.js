@@ -16,10 +16,16 @@ function BuyerHome(props) {
             console.log('Error: ' + e)
         }
     }
+
+    const viewCart = () => {
+        
+    }
+
     return (
         <Container>
-            <p>
-                <Button variant='link' onClick={handleLogout}>Log Out</Button>
+            <p className=''>
+                <Button variant='primary' className="mt-3" onClick={viewCart}>Cart</Button>
+                <Button variant='primary' className="mt-3 ms-3" onClick={handleLogout}>Log Out</Button>
             </p>
             Buyer Dashboard: User Role :: { currentUser.email }
             <BuyerAllProducts />
