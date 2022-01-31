@@ -22,7 +22,25 @@ function SellerAllProducts() {
         const tmp_products = data.docs.map(d => ({
             id: d.id, ...d.data()
         }))
-        setProducts(tmp_products)
+        let promises = tmp_products.map((p) => {
+            let img_uri_key = p.image_id
+            imageURLS[img_uri_key] = ''
+            const storageRef = ref(storage, img_uri_key)
+            return getDownloadURL(storageRef)
+        })
+        Promise.all(promises).then((url) => {
+            url.forEach(item => {
+                let tmpStr = item.substring(
+                    item.indexOf('product_folder'),
+                    item.indexOf('jpg') + 3
+                )
+                tmpStr = tmpStr.replace('%2F', '/')
+                imageURLS[tmpStr] = item
+            })
+        }).then(() => {
+            setImageURLS(imageURLS)
+            setProducts(tmp_products)
+        })
     }
 
 
@@ -31,7 +49,6 @@ function SellerAllProducts() {
     }
 
     useEffect(() => {
-        console.log('lsjkdfb')
         getAllProducts()
     }, [])
 
@@ -47,32 +64,24 @@ function SellerAllProducts() {
             {/* { JSON.stringify(products)} */}
 
             <CardGroup>
-                {products && products.map((d) => {
-                    let img_uri_key = d.image_id
-                    const storageRef = ref(storage, img_uri_key)
-                    getDownloadURL(storageRef).then(
-                        (url) => {
-                            imageURLS[img_uri_key] = url
-                            setImageURLS(imageURLS)
-                        }
-                    )
-                    console.log(imageURLS)
-                    return (
-                        <div key={d.id}>
-                            <Card className='mt-4'>
-                                <Card.Img variant="top" src={imageURLS[d.image_id]} alt='image' height={200} />
-                                <Card.Body>
-                                    {/* <Image src={url} /> */}
-                                    <Card.Title>{d.title}</Card.Title>
-                                    <Card.Text>
-                                        <img src={imageURLS[d.image_id]} height={200} />
-                                        {d.description}</Card.Text>
-                                </Card.Body>
-                                <Card.Footer className="text-muted">${d.price}</Card.Footer>
-                            </Card>
-                        </div>
-                    )
-                })}
+                {products && products.map((p) => (
+                    <Card key={p.id} className="mt-3 ms-3" style={{ minWidth: 250, maxWidth: 250 }}>
+                        <Card.Img
+                            variant="top"
+                            src={imageURLS[p.image_id]}
+                            alt='image'
+                            height={200} />
+                        <Card.Body>
+                            <Card.Title>{p.title} <br />${p.price}</Card.Title>
+                            <Card.Text>
+                                {p.description}
+                            </Card.Text>
+                        </Card.Body>
+                        <Card.Footer className="text-muted">
+                            <Button variant="primary">Add to Cart</Button>
+                        </Card.Footer>
+                    </Card>
+                ))}
             </CardGroup>
 
         </Container>

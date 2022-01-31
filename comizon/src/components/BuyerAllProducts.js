@@ -56,50 +56,23 @@ function BuyerAllProducts() {
             <h3>Products</h3>
             <CardGroup>
                 {products && products.map((p) => (
-                    <Card key={p.id}>
+                    <Card key={p.id} className="mt-3 ms-3" style={{ minWidth: 250, maxWidth: 250 }}>
                         <Card.Img
                             variant="top"
                             src={imageURLS[p.image_id]}
                             alt='image'
                             height={200} />
                         <Card.Body>
-                            <Card.Title>{p.title}</Card.Title>
+                            <Card.Title>{p.title} <br />${p.price}</Card.Title>
                             <Card.Text>
                                 {p.description}
                             </Card.Text>
-                            <Button variant="primary">Add to Cart</Button>
                         </Card.Body>
-                        <Card.Footer className="text-muted">${p.price}</Card.Footer>
+                        <Card.Footer className="text-muted">
+                            <Button variant="primary">Add to Cart</Button>
+                        </Card.Footer>
                     </Card>
                 ))}
-
-                {/* {products && products.map((d) => {
-                    let img_uri_key = d.image_id
-                    const storageRef = ref(storage, img_uri_key)
-                    getDownloadURL(storageRef).then(
-                        (url) => {
-                            imageURLS[img_uri_key] = url
-                            setImageURLS(imageURLS)
-                        }
-                    )
-                    // console.log(imageURLS)
-                    return (
-                        <div key={d.id}>
-                            <Card className='mt-2 ms-2'>
-                                <Card.Img variant="top" src={imageURLS[d.image_id]} alt='image' height={200} />
-                                <Card.Body>
-                                    
-                                    <Card.Title>{d.title}</Card.Title>
-                                    <Card.Text>
-                                        {d.description}
-                                    </Card.Text>
-                                    <Button variant="primary">Add to Cart</Button>
-                                </Card.Body>
-                                <Card.Footer className="text-muted">${d.price}</Card.Footer>
-                            </Card>
-                        </div>
-                    )
-                })} */}
             </CardGroup>
 
         </Container>
