@@ -35,8 +35,8 @@ class SellerProductDataService {
   }
 
   getProduct = (id) => {
-    const productDoc = doc(db, TB_PRODUCTS, id)
-    return getDoc(productDoc)
+    const data = doc(db, TB_PRODUCTS, id)
+    return getDoc(data)
   }
 }
 
