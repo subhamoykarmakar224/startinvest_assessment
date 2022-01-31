@@ -29,9 +29,7 @@ function BuyerAllProducts() {
             return getDownloadURL(storageRef)
         })
         Promise.all(promises).then((url) => {
-            // console.log('URL')
             url.forEach(item => {
-                // console.log('=> ')
                 let tmpStr = item.substring(
                     item.indexOf('product_folder'),
                     item.indexOf('jpg') + 3
@@ -40,8 +38,6 @@ function BuyerAllProducts() {
                 imageURLS[tmpStr] = item
             })
         }).then(() => {
-            // console.log("LOL")
-            // console.log(imageURLS)
             setImageURLS(imageURLS)
             setProducts(tmp_products)
         })
@@ -58,10 +54,6 @@ function BuyerAllProducts() {
     return (
         <Container>
             <h3>Products</h3>
-
-            {/* { JSON.stringify(imageURLS)} */}
-            {/* { JSON.stringify(products)} */}
-
             <CardGroup>
                 {products && products.map((p) => (
                     <Card key={p.id}>
